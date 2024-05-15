@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>QR Code Project</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+</head>
+
+<body class="p-4 ">
+  <label for="file">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" width="100"
+      height="100" class="p-2 border rounded-2 upload-img" alt="logo" />
+  </label>
+  <input id="file" name="file" class="file-upload" type="file" hidden />
+  <br />
+
+  <label for="qr-data" class="mt-4">Url : </label>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text" id="basic-addon3">https://abcdefg.jp/2024/hd/</span>
+    </div>
+    <input type="text" class="form-control qr-data" id="qr-data" aria-describedby="basic-addon3">
+    <div class="input-group-append">
+      <span class="input-group-text">.pdf</span>
+    </div>
+  </div>
+
+  <br />
+  <label for="qr-dimon">Width, Height : </label>
+  <input id="qr-dimon" min="200" max="800" value="300" name="qr-dimon" class="qr-dimon form-control" type="number" />
+  <button type="button" class="btn btn-primary gen-btn mt-4">生成</button>
+  <button type="button" class="btn btn-primary down-btn mt-4">ダウンロード</button>
+  <div class="d-flex">
+    <div id="canvas" class="mt-5 mx-auto"></div>
+  </div>
+
+  <script type="text/javascript">
+    const qrCode = new QRCodeStyling({
+      width: 300,
+      height: 300,
+      type: "svg",
+      image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
+      imageOptions: {
+        crossOrigin: "anonymous",
+        margin: 5
+      }
+    });
+    $(document).ready(function () {
+      $('.gen-btn').click(() => {
+        // qrCode.download({ name: "qr", extension: "svg" });
+        qrCode.update({
+          data: 'https://abcdefg.jp/2024/hd/' + $('.qr-data').val() + '.pdf',
+          width: Number($('.qr-dimon').val()),
+          height: Number($('.qr-dimon').val())
+        })
+      })
+      $('.file-upload').change((e) => {
+        const file = e.target.files[0];
+        const url = URL.createObjectURL(file)
+        $('.upload-img').attr("src", url)
+        qrCode.update({
+          image: url
+        })
+      })
+      $('.down-btn').click(() => {
+        qrCode.download({ name: $('.qr-data').val(), extension: "svg" });
+      })
+    });
+    qrCode.append(document.getElementById("canvas"));
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
